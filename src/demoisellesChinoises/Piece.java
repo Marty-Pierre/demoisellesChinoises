@@ -2,7 +2,7 @@ package demoisellesChinoises;
 
 public class Piece {
 
-    private int posx; //Il est possible qu'il y ai pas besoin de 2 coordonées, juste de 1 seule
+    private int posx;
     private int posy;
 
     private Player player;
