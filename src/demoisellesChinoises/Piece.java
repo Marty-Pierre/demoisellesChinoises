@@ -12,4 +12,16 @@ public class Piece {
         this.posy = y;
         this.player = p;
     }
+
+    public int getPosx(){
+        return this.posx;
+    }
+
+    public int getPosy(){
+        return this.posy;
+    }
+
+    public Player getPlayer(){
+        return this.player;
+    }
 }
