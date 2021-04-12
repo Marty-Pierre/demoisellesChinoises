@@ -6,7 +6,7 @@ public class Board {
 
     private Piece[] tabPieces;
     private int size;
-    private ArrayList<Board> possiblesMoves;
+    private ArrayList<Move> possiblesMoves;
     private Player curPlayer;
     private Player player1;
     private Player player2;
@@ -47,11 +47,27 @@ public class Board {
 
     }
 
-    public ArrayList<Board> getMoves(){
-        return possiblesMoves;
+    public ArrayList<Move> getMoves(){
+        this.possiblesMoves = new ArrayList<>(60); //Estimation grossiere du facteur moyen de branchement
+        Piece p;
+        if(this.curPlayer == this.player1){
+            //C'est au tour du joueur 1
+            for(int i = 0; i <= 8; i++){
+                p = tabPieces[i];
+
+            }
+        }
+        else {
+            //C'est au tour du joueur 2
+            for(int i = 9; i <= 17; i++){
+                p = tabPieces[i];
+            }
+        }
+        return this.possiblesMoves;
     }
 
-    public void makeMove(Board move){
+    public void makeMove(Move m){
+
 
 
 
