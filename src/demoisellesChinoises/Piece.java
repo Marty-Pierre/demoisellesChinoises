@@ -24,4 +24,12 @@ public class Piece {
     public Player getPlayer(){
         return this.player;
     }
+
+    public void setPosx(int posx) {
+        this.posx = posx;
+    }
+
+    public void setPosy(int posy) {
+        this.posy = posy;
+    }
 }

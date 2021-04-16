@@ -66,9 +66,28 @@ public class Board {
         return this.possiblesMoves;
     }
 
+
     public void makeMove(Move m){
-
-
+        int fromX = m.getFromX();
+        int fromY = m.getFromY();
+        if(this.curPlayer == this.player1){
+            for(int i = 0; i <= 8; i++){
+                if((this.tabPieces[i].getPosx() == fromX) && (this.tabPieces[i].getPosy() == fromY)){
+                    //On déplace la piece
+                    this.tabPieces[i].setPosx(m.getToX());
+                    this.tabPieces[i].setPosy(m.getToY());
+                }
+            }
+        }
+        else{
+            for(int i = 9; i<= 17; i++){
+                if((this.tabPieces[i].getPosx() == fromX) && (this.tabPieces[i].getPosy() == fromY)){
+                    //On déplace la piece
+                    this.tabPieces[i].setPosx(m.getToX());
+                    this.tabPieces[i].setPosy(m.getToY());
+                }
+            }
+        }
 
 
         //Si la partie n'est pas terminé, c'est au joueur suivant de jouer
@@ -81,15 +100,30 @@ public class Board {
         }
     }
 
-    public void evaluate(Board etat){
-        //
 
+    //Evalue la valeur de l'etat actuel (positif si favorable, negatif si defavorable, neutre sinon)
+    public int evaluate(){
+        int scorePlayer1 = 0;
+        int scorePlayer2 = 0;
 
+        //Distance qui separe nos pions de notre base
+        for(int i = 0; i <= 8; i++){
+            scorePlayer1 += this.tabPieces[i].getPosy();
+        }
+        //Distance qui separe les pions de notre adversaire de sa base
+        for(int i = 9; i <= 17; i++){
+            scorePlayer2 += ((this.size * 2) + 2) - this.tabPieces[i].getPosy();
+        }
+
+        //Si l'adversaire a un meilleur score que nous (c'est a dire que ses pions sont plus avancés) alors la fonction renvoie une valeur negative
+        return scorePlayer1 - scorePlayer2;
     }
+
 
     public Player currentPlayer(){
         return this.curPlayer;
     }
+
 
     //Si on appelle la fonction isGameOver apres chaque action de chaque joueur, alors selon les regles du jeu, il ne peut y avoir
     //qu'un seul joueur qui possede tout ses pions de l'autre coté du plateau
@@ -113,6 +147,7 @@ public class Board {
         return res;
     }
 
+
     public boolean isPawnInOppositeSide(Piece p){
         Player joueur = p.getPlayer();
         boolean res = false;
@@ -128,5 +163,6 @@ public class Board {
         }
         return res;
     }
+
 
 }
