@@ -17,8 +17,8 @@ public class Board {
         //Pour un plateau de taille s ( avec s >= 4 ) , alors il y a 18 + 16 + 13 +|(4-s)| * 2 cases, mais si s = 3 alors il y a 18 + 16 cases
         this.size = s;
 
-        this.player1 = new Player();
-        this.player2 = new Player();
+        this.player1 = new Player("Joueur 1");
+        this.player2 = new Player("Joueur 2");
         this.curPlayer = this.player1; //On suppose que le joueur 1 est le premier a jouer
 
         this.tabPieces = new Piece[18];
@@ -48,9 +48,9 @@ public class Board {
     }
 
     public ArrayList<Move> getMoves(){
-        this.possiblesMoves = new ArrayList<>(60); //Estimation grossiere du facteur moyen de branchement
+        this.possiblesMoves = new ArrayList<>(60); //60 est une estimation grossiere du facteur moyen de branchement
         Piece p;
-        if(this.curPlayer == this.player1){
+        if(this.curPlayer.equals(this.player1)){
             //C'est au tour du joueur 1
             for(int i = 0; i <= 8; i++){
                 p = tabPieces[i];
@@ -70,7 +70,7 @@ public class Board {
     public void makeMove(Move m){
         int fromX = m.getFromX();
         int fromY = m.getFromY();
-        if(this.curPlayer == this.player1){
+        if(this.curPlayer.equals(this.player1)){
             for(int i = 0; i <= 8; i++){
                 if((this.tabPieces[i].getPosx() == fromX) && (this.tabPieces[i].getPosy() == fromY)){
                     //On déplace la piece
@@ -92,9 +92,9 @@ public class Board {
 
         //Si la partie n'est pas terminé, c'est au joueur suivant de jouer
         if(!this.isGameOver()) {
-            if (this.curPlayer == this.player1) {
+            if (this.curPlayer.equals(this.player1)) {
                 this.curPlayer = this.player2;
-            } else if (this.curPlayer == this.player2) {
+            } else if (this.curPlayer.equals(this.player2)) {
                 this.curPlayer = this.player1;
             }
         }
@@ -151,12 +151,12 @@ public class Board {
     public boolean isPawnInOppositeSide(Piece p){
         Player joueur = p.getPlayer();
         boolean res = false;
-        if(joueur == this.player2){
+        if(joueur.equals(this.player2)){
             if (p.getPosy() < 4){
                 res = true;
             }
         }
-        else if(joueur == this.player1){
+        else if(joueur.equals(this.player1)){
             if(p.getPosy() > ((this.size * 2 ) - 2)){
                 res = true;
             }
