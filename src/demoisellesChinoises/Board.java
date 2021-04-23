@@ -54,26 +54,6 @@ public class Board {
          this.tabPieces = b.getTabPieces();
     }
 
-    public ArrayList<Move> getMoves(){
-        this.possiblesMoves = new ArrayList<>(60); //60 est une estimation grossiere du facteur moyen de branchement
-        Piece p;
-
-        if(this.curPlayer.equals(this.player1)){
-            //C'est au tour du joueur 1
-            for(int i = 0; i <= 8; i++){
-                p = tabPieces[i];
-
-            }
-        }
-        else {
-            //C'est au tour du joueur 2
-            for(int i = 9; i <= 17; i++){
-                p = tabPieces[i];
-            }
-        }
-        return this.possiblesMoves;
-    }
-
 
     public void makeMove(Move m){
         int fromX = m.getFromX();
@@ -234,5 +214,182 @@ public class Board {
 
     public Player getPlayer2() {
         return player2;
+    }
+
+    public ArrayList<Move> getMoves(){
+        this.possiblesMoves = new ArrayList<>(60); //60 est une estimation grossiere du facteur moyen de branchement
+        Piece p;
+
+        if(this.curPlayer.equals(this.player1)){
+            //C'est au tour du joueur 1
+            for(int i = 0; i <= 8; i++){
+                p = tabPieces[i];
+                if(p.getPosy() <= this.size){
+                    //On est dans la partie basse du plateau
+                    this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() + 1, p.getPosy() + 1)); //Haut droit
+                    this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx(), p.getPosy() + 1)); //Haut gauche
+                    if(p.getPosy() != 1){
+                        //On n'est pas a la premiere ligne du plateau
+                        if(p.getPosx() != 1){
+                            //On n'est pas adjacent au mur gauche
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy())); //Gauche
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy() - 1)); //Bas gauche
+                        }
+                        if(p.getPosy() != (p.getPosx() - 1)){
+                            //On n'est pas pret du mur droit
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() + 1, p.getPosy())); //Droit
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx(),p.getPosy() - 1)); //Bas droit
+                        }
+                    }
+                    else{
+                        //On est sur la premiere ligne
+                        if(p.getPosx() == 1){
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() + 1, p.getPosy())); //Droit
+                        }
+                        else {
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy())); //Gauche
+                        }
+                    }
+                }
+                else{
+                    if(p.getPosy() >= this.size + 2){
+                        //On est dans la partie haute du plateau
+                        this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() + 1, p.getPosy() - 1));//Bas droit
+                        this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx(),p.getPosy() - 1)); //Bas gauche
+                        if(p.getPosy() != (this.size * 2) + 1){
+                            //On n'est pas a la derniere ligne du plateau
+                            if(p.getPosx() != 1){
+                                //On n'est pas adjacent au mur gauche
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy())); //Gauche
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() - 1, p.getPosy() + 1)); //Haut gauche
+                            }
+                            if(p.getPosx() != ((this.size * 2 )+ 3)){
+                                //On n'est pas adjacent au mur droit
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() + 1, p.getPosy())); //Droit
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx(), p.getPosy() + 1)); //Haut droit
+                            }
+                        }
+                        else{
+                            //On est a la derniere ligne du plateau
+                            if(p.getPosx() == 1){
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() + 1, p.getPosy())); //Droit
+                            }
+                            else{
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy())); //Gauche
+                            }
+                        }
+                    }
+
+                    else {
+                        //On est a la ligne au milieu du plateau
+                        if(p.getPosx() != 1){
+                            //On n'est pas adjacent au mur gauche
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy())); //Gauche
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() - 1, p.getPosy() + 1)); //Haut gauche
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy() - 1)); //Bas gauche
+                        }
+                        if(p.getPosy() != (p.getPosx() - 1)){
+                            //On n'est pas adjacent au mur droit
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() + 1, p.getPosy())); //Droit
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx(), p.getPosy() + 1)); //Haut droit
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx(),p.getPosy() - 1)); //Bas droit
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            //C'est au tour du joueur 2
+            for(int i = 9; i <= 17; i++){
+                p = tabPieces[i];
+                if(p.getPosy() <= this.size){
+                    //On est dans la partie basse du plateau
+                    this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() + 1, p.getPosy() + 1)); //Haut droit
+                    this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx(), p.getPosy() + 1)); //Haut gauche
+                    if(p.getPosy() != 1){
+                        //On n'est pas a la premiere ligne du plateau
+                        if(p.getPosx() != 1){
+                            //On n'est pas adjacent au mur gauche
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy())); //Gauche
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy() - 1)); //Bas gauche
+                        }
+                        if(p.getPosy() != (p.getPosx() - 1)){
+                            //On n'est pas pret du mur droit
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() + 1, p.getPosy())); //Droit
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx(),p.getPosy() - 1)); //Bas droit
+                        }
+                    }
+                    else{
+                        //On est sur la premiere ligne
+                        if(p.getPosx() == 1){
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() + 1, p.getPosy())); //Droit
+                        }
+                        else {
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy())); //Gauche
+                        }
+                    }
+                }
+                else{
+                    if(p.getPosy() >= this.size + 2){
+                        //On est dans la partie haute du plateau
+                        this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() + 1, p.getPosy() - 1));//Bas droit
+                        this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx(),p.getPosy() - 1)); //Bas gauche
+                        if(p.getPosy() != (this.size * 2) + 1){
+                            //On n'est pas a la derniere ligne du plateau
+                            if(p.getPosx() != 1){
+                                //On n'est pas adjacent au mur gauche
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy())); //Gauche
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() - 1, p.getPosy() + 1)); //Haut gauche
+                            }
+                            if(p.getPosx() != ((this.size * 2 )+ 3)){
+                                //On n'est pas adjacent au mur droit
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() + 1, p.getPosy())); //Droit
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx(), p.getPosy() + 1)); //Haut droit
+                            }
+                        }
+                        else{
+                            //On est a la derniere ligne du plateau
+                            if(p.getPosx() == 1){
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() + 1, p.getPosy())); //Droit
+                            }
+                            else{
+                                this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy())); //Gauche
+                            }
+                        }
+                    }
+
+                    else {
+                        //On est a la ligne au milieu du plateau
+                        if(p.getPosx() != 1){
+                            //On n'est pas adjacent au mur gauche
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy())); //Gauche
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() - 1, p.getPosy() + 1)); //Haut gauche
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx() - 1, p.getPosy() - 1)); //Bas gauche
+                        }
+                        if(p.getPosy() != (p.getPosx() - 1)){
+                            //On n'est pas adjacent au mur droit
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(), p.getPosx() + 1, p.getPosy())); //Droit
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx(), p.getPosy() + 1)); //Haut droit
+                            this.possiblesMoves.add(new Move(p.getPosx(),p.getPosy(),p.getPosx(),p.getPosy() - 1)); //Bas droit
+                        }
+                    }
+                }
+            }
+        }
+        ArrayList<Move> alm = new ArrayList<>(this.possiblesMoves);
+        int x;
+        int y;
+        for(int i = 0; i <= 17; i++){
+            x = this.tabPieces[i].getPosx();
+            y = this.tabPieces[i].getPosy();
+            for(Move m : alm){
+                if((m.getToX() == x) && (m.getToY() == y)){
+                    //Mouvement impossible
+                    this.possiblesMoves.remove(m);
+                }
+            }
+            alm = new ArrayList<>(this.possiblesMoves);
+        }
+        return this.possiblesMoves;
     }
 }

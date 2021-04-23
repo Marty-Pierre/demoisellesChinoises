@@ -1,5 +1,7 @@
 package demoisellesChinoises;
 
+import java.util.Objects;
+
 public class Move {
     private int fromX;
     private int fromY;
@@ -11,7 +13,7 @@ public class Move {
         this.fromX = fX;
         this.fromY = fY;
         this.toX = tX;
-        this.toX = tY;
+        this.toY = tY;
 
     }
 
@@ -30,5 +32,22 @@ public class Move {
 
     public int getToY() {
         return toY;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Move move = (Move) o;
+        return fromX == move.fromX &&
+                fromY == move.fromY &&
+                toX == move.toX &&
+                toY == move.toY;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fromX, fromY, toX, toY);
     }
 }
