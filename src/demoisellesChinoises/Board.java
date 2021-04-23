@@ -1,6 +1,7 @@
 package demoisellesChinoises;
 
 import java.util.ArrayList;
+import java.lang.Math;
 
 public class Board {
 
@@ -42,14 +43,21 @@ public class Board {
         this.tabPieces[15] = new Piece(2,(this.size * 2) -1, player2);
         this.tabPieces[16] = new Piece(3,(this.size * 2) -1, player2);
         this.tabPieces[17] = new Piece(4,(this.size * 2) -1, player2);
+    }
 
-
-
+    public Board(Board b){
+         this.curPlayer = b.curPlayer;
+         this.player1 = b.getPlayer1();
+         this.player2 = b.getPlayer2();
+         this.possiblesMoves = b.getMoves();
+         this.size = b.getSize();
+         this.tabPieces = b.getTabPieces();
     }
 
     public ArrayList<Move> getMoves(){
         this.possiblesMoves = new ArrayList<>(60); //60 est une estimation grossiere du facteur moyen de branchement
         Piece p;
+
         if(this.curPlayer.equals(this.player1)){
             //C'est au tour du joueur 1
             for(int i = 0; i <= 8; i++){
@@ -164,5 +172,67 @@ public class Board {
         return res;
     }
 
+    public int evaluation_alpha_beta(int c, int a, int b) {
+        int alpha = a;
+        int beta = b;
+        if (this.isGameOver()) {
+            //On a gagne
+            if (this.curPlayer.equals(this.player1)) {
+                return 1000000; //Censé retourné l'infini, mais une valeur suffisemment grande suffit
+            }
+            //On a perdu
+            if (this.curPlayer.equals(this.player2)) {
+                return -1000000; //Censé retourné moins l'infini, mais une valeur suffisemment grande suffit
+            }
+        }
 
+        if (c == 0) {
+            return evaluate();
+        }
+
+        ArrayList<Move> successeursMoves = this.getMoves();
+        Board tempBoard;
+        if (this.curPlayer.equals(this.player1)) {
+            int score_max = -1000000;
+            for (Move m : successeursMoves) {
+                tempBoard = new Board(this);
+                tempBoard.makeMove(m);
+                score_max = Math.max(score_max, tempBoard.evaluation_alpha_beta(c - 1,alpha, beta));
+                if(score_max >= beta){ //Coupure beta
+                    return score_max;
+                }
+                alpha = Math.max(alpha, score_max);
+            }
+            return score_max;
+        }
+        else{
+            int score_min = 1000000;
+            for(Move m : successeursMoves){
+                tempBoard = new Board(this);
+                tempBoard.makeMove(m);
+                score_min = Math.min(score_min, tempBoard.evaluation_alpha_beta(c - 1, alpha, beta));
+                if(score_min <= alpha){//Coupure alpha
+                    return score_min;
+                }
+                beta = Math.min(beta, score_min);
+            }
+            return score_min;
+        }
+    }
+
+    public Piece[] getTabPieces() {
+        return tabPieces;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
 }

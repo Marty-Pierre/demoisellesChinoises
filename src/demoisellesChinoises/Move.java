@@ -7,7 +7,11 @@ public class Move {
     private int toX;
     private int toY;
 
-    public Move(){
+    public Move(int fX, int fY, int tX, int tY){
+        this.fromX = fX;
+        this.fromY = fY;
+        this.toX = tX;
+        this.toX = tY;
 
     }
 
